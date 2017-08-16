@@ -38,3 +38,15 @@ def displayData(X, y, indices_to_display = None):
 	img = scipy.misc.toimage( big_picture )
 	plt.imshow(img,cmap = cm.Greys_r)
 	plt.show()
+
+def sigmoid(X, theta):
+	tht = theta.reshape(theta.size, 1)
+	return 1/(1+np.e**-(X.dot(tht)))
+
+def lrCostFunction(X, y, theta, lmbd):
+	m = y.size
+	fst_part = (y-1).T.dot(np.log(1-sigmoid(X, theta)))
+	print(fst_part)
+	scnd_part = y.T.dot(np.log(sigmoid(X,theta)))
+	print(scnd_part)
+	return (fst_part - scnd_part)/m 
