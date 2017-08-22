@@ -44,9 +44,12 @@ def sigmoid(X, theta):
 	tht = theta.reshape(theta.size, 1)
 	return 1/(1+np.e**-(X.dot(tht)))
 
+def sigmoidMatrix(X, thetas):
+	return 1/(1+np.e**-(X.dot(thetas)))
+
 def lrCostFunction(X, y, theta, lmbd):
 	m = y.size
-	fst_part = (y-1).T.dot(np.log(1-sigmoid(X, theta)))
+	fst_part = (y-1).T.dot(np.log(1e-10 + 1-sigmoid(X, theta)))
 	scnd_part = y.T.dot(np.log(sigmoid(X,theta)))
 	thrd_part = lmbd * np.insert(theta[1:]**2, 0, 0, axis=0).sum()/2
 	return ((fst_part - scnd_part + thrd_part)/m).sum() 
