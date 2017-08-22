@@ -2,6 +2,7 @@ import scipy.misc
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from scipy import optimize
 
 
 
@@ -46,7 +47,26 @@ def sigmoid(X, theta):
 def lrCostFunction(X, y, theta, lmbd):
 	m = y.size
 	fst_part = (y-1).T.dot(np.log(1-sigmoid(X, theta)))
-	print(fst_part)
 	scnd_part = y.T.dot(np.log(sigmoid(X,theta)))
-	print(scnd_part)
-	return (fst_part - scnd_part)/m 
+	thrd_part = lmbd * np.insert(theta[1:]**2, 0, 0, axis=0).sum()/2
+	return ((fst_part - scnd_part + thrd_part)/m).sum() 
+
+def lrGradientFunction(X, y, theta, lmbd):
+	m = y.size
+	tht = theta.reshape(theta.size,1)
+	grad = (X.T.dot((sigmoid(X, tht) - y)) + lmbd*np.insert(tht[1:], 0, 0, axis=0))/m
+	return grad
+
+def oneVsAll(X, y, lmbd, num_labels):
+	m = y.size
+	n = X.shape[1]
+	X_d = np.insert(X, 0, 1, axis=1)
+	initial_theta = np.zeros(n+1, 1)
+	result = optimize.fmin_cg
+
+def predict(X, theta, label):
+	m = X.shape[0]
+	h = np.zeros(m).reshape(m, 1)
+	tht = theta.reshape(theta.size, 1)
+	h = (X.dot(tht) >= 0) * label
+	return h
