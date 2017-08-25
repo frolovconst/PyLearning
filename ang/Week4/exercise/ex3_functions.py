@@ -73,3 +73,10 @@ def predict(X, theta, label):
 	tht = theta.reshape(theta.size, 1)
 	h = (X.dot(tht) >= 0) * label
 	return h
+
+def predictOneVsAll(X, thetas):
+	thetas_t = thetas.T
+	thts = np.insert(thetas_t, thetas_t.shape[1], thetas_t[:,0], axis=1)
+	X_p = np.argmax(sigmoidMatrix(X, thts[:,1:]), axis=1) + 1
+	X_p = X_p.reshape(X_p.size, 1)
+	return X_p
