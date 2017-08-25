@@ -67,16 +67,16 @@ def oneVsAll(X, y, lmbd, num_labels):
 	initial_theta = np.zeros(n+1, 1)
 	result = optimize.fmin_cg
 
-def predict(X, theta, label):
-	m = X.shape[0]
-	h = np.zeros(m).reshape(m, 1)
-	tht = theta.reshape(theta.size, 1)
-	h = (X.dot(tht) >= 0) * label
-	return h
-
 def predictOneVsAll(X, thetas):
 	thetas_t = thetas.T
 	thts = np.insert(thetas_t, thetas_t.shape[1], thetas_t[:,0], axis=1)
 	X_p = np.argmax(sigmoidMatrix(X, thts[:,1:]), axis=1) + 1
 	X_p = X_p.reshape(X_p.size, 1)
 	return X_p
+
+def predict(X, theta1, theta2):
+	IL = np.insert(X, 0, 1, axis=1)
+	HL = sigmoidMatrix(IL, theta1.T)
+	HL = np.insert(HL, 0, 1, axis=1)
+	OL = sigmoidMatrix(HL, theta2.T)
+	return (np.argmax((OL), axis=1) + 1).reshape(OL.shape[0],1)
